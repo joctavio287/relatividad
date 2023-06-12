@@ -1,0 +1,1 @@
+Este repositorio va a estar dedicado a resolver problemas de relatividad especial y general.
