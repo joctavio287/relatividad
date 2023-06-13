@@ -1,4 +1,45 @@
-import yaml, argparse, os
+import yaml, argparse, os, pickle
+
+def guarda_pkl(path:str, dic:dict, reescribir:bool=False):
+    '''
+    Para salvar un diccionario en formato pickle.\n
+    INPUT\n
+    path:str -> path del diccionario a guardar.
+    dic:dict -> diccionario a guardar.
+    reescribir:bool -> si reescribimos o no.
+    '''
+    isfile = os.path.isfile(path)
+    if isfile:
+        if not reescribir:
+            print('Este archivo ya existe, para sobreescribirlo usar el argumento rewrite = True.')
+            return
+    try:
+        with open(file = path, mode = "wb") as archive:
+            pickle.dump(file = archive, obj=dic)
+        texto = f'Diccionario guardado en: {path}.'
+        if isfile:
+            texto += f'Atención: se reescribió el archivo {path}'
+    except:
+        print('Algo fallo cuando se guardaba')
+    return
+
+def carga_pkl(path:str):
+    '''
+    Para cargar un diccionario en formato pickle.\n
+    INPUT\n
+    path:str -> path del diccionario a leer.
+    '''
+    isfile = os.path.isfile(path)
+    if not isfile:
+        print(f'El archivo {path} no existe')
+        return
+    try:
+        with open(file = path, mode = "rb") as archive:
+            data = pickle.load(file = archive)
+        return data
+    except:
+        print('Algo fallo')
+    return
 
 class Parser:
     '''
@@ -20,7 +61,7 @@ class Parser:
         # en caso de que se corra internamente el programa
         if self.configuration:
 
-            # construimos las variables de la configuracion
+            # Construimos las variables de la configuracion
             dic = Parser.configuration_builder(self.file_path, self.configuration)
             return dic
 
@@ -49,7 +90,7 @@ class Parser:
             else:
                 print(args.config)
             
-            # construimos el diccionario con la dada configuración
+            # Construimos el diccionario con la dada configuración
             dic = Parser.configuration_builder(self.file_path, args.config)
             return dic
     
