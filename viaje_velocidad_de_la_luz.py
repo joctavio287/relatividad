@@ -52,3 +52,14 @@ result = im.convert(mode="RGB", matrix=Matrix)
 plt.figure(tight_layout=True)
 plt.imshow(X=result)
 plt.show(block=False)
+
+
+def hex_to_rgb(hex):
+  rgb = []
+  for i in (0, 2, 4):
+    decimal = int(hex[i:i+2], 16)
+    rgb.append(decimal)
+  
+  return tuple(rgb)
+
+print(hex_to_rgb('ff0000'))
