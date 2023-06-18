@@ -23,9 +23,32 @@ variables = Parser(configuration='viaje_velocidad_de_la_luz').config()
 img_path = os.path.join(variables['input_path'], 'playa.png')
 imagen = np.asarray(Image.open(fp=img_path))
 
-
 colores = {0:'Reds', 1:'Greens', 2:'Blues'}
-for i in range(3):
-    plt.figure(tight_layout=True)
-    plt.imshow(X=angulo_a_rango_pixel(np.pi*2, imagen=imagen)[:,:,i], cmap=colores[i])
-    plt.show(block=False)
+# for i in range(3):
+#     plt.figure(tight_layout=True)
+#     plt.imshow(X=angulo_a_rango_pixel(np.pi*2, imagen=imagen)[:,:,i], cmap=colores[i])
+#     plt.show(block=False)
+imagen_r=angulo_a_rango_pixel(np.pi*2, imagen=imagen)[:,:,0]
+imagen_g=angulo_a_rango_pixel(np.pi*2, imagen=imagen)[:,:,1]
+imagen_b=angulo_a_rango_pixel(np.pi*2, imagen=imagen)[:,:,2]
+
+
+im = Image.open(img_path)
+
+# Split into component channels
+R, G, B = im.split()
+
+# Make transform matrix, to multiply R by 1.1, G by 0.9 and leave B unchanged
+# newRed   = 1.1*oldRed  +  0*oldGreen    +  0*oldBlue  + constant
+# newGreen = 0*oldRed    +  0.9*OldGreen  +  0*OldBlue  + constant
+# newBlue  = 0*oldRed    +  0*OldGreen    +  1*OldBlue  + constant
+Matrix = (1,0,0,0,
+          0,1,0,0, 
+          0,0,.1,0) 
+
+# Apply transform and save 
+result = im.convert(mode="RGB", matrix=Matrix) 
+
+plt.figure(tight_layout=True)
+plt.imshow(X=result)
+plt.show(block=False)
